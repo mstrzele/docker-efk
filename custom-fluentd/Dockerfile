@@ -21,4 +21,4 @@ RUN apk --no-cache --update add sudo build-base ruby-dev && \
 
 EXPOSE 24284
 
-CMD dockerize -wait http://elasticsearch:9200 -timeout 20s fluentd -c /fluentd/etc/$FLUENTD_CONF -p /fluentd/plugins $FLUENTD_OPT
+CMD dockerize -wait http://elasticsearch:9200 -timeout 30s fluentd -c /fluentd/etc/$FLUENTD_CONF -p /fluentd/plugins $FLUENTD_OPT
