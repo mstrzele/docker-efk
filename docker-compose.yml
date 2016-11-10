@@ -1,42 +1,24 @@
-elasticsearch:
-  image: elasticsearch:latest
-  command: elasticsearch -Des.network.host=0.0.0.0
-  ports:
-    - '9200:9200'
-kibana:
-  build: kibana/
-  volumes:
-    - ./kibana/config/kibana.yml:/opt/kibana/config/kibana.yml
-  ports:
-    - '5601:5601'
-  links:
-    - elasticsearch
-fluentd:
-  build: fluentd/
-  volumes:
-    - /var/lib/docker/containers:/var/lib/docker/containers
-  links:
-    - elasticsearch
-  ports:
-    - '24224:24224'
-nginx:
-  build: nginx/
-  links:
-    - fluentd
-    - node_app
-  ports:
-    - '80:80'
-  log_driver: 'fluentd'
-  log_opt:
-    fluentd-address: localhost:24224
-    fluentd-tag: docker.{{.FullID}}
-node_app:
-  build: node_app/
-  links:
-    - fluentd
-  ports:
-    - '8080:8080'
-  log_driver: 'fluentd'
-  log_opt:
-    fluentd-address: localhost:24224
-    fluentd-tag: docker.{{.FullID}}
+version: '2'
+services:
+  elasticsearch:
+    image: elasticsearch:5.0
+    command: elasticsearch -E network.host=0.0.0.0
+    ports:
+      - "9200:9200"
+    volumes:
+      - /usr/share/elasticsearch/data
+  docker-fluentd-elasticsearch:
+    build: ./docker-fluentd-elasticsearch
+    image: mstrzele/docker-fluentd-elasticsearch
+    ports:
+      - "24224:24224"
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers
+    links:
+      - elasticsearch
+  kibana:
+    image: kibana:5.0
+    ports:
+      - "5601:5601"
+    links:
+      - elasticsearch
