@@ -5,13 +5,6 @@ ENV PATH /home/fluent/.gem/ruby/2.3.0/bin:$PATH
 
 USER root
 
-RUN apk add --no-cache ca-certificates openssl \
-    && update-ca-certificates
-
-ENV DOCKERIZE_VERSION v0.2.0
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-
 RUN apk --no-cache --update add sudo build-base ruby-dev && \
 
     sudo -u fluent gem install fluent-plugin-elasticsearch && \
@@ -21,4 +14,4 @@ RUN apk --no-cache --update add sudo build-base ruby-dev && \
 
 EXPOSE 24284
 
-CMD dockerize -wait http://elasticsearch:9200 -timeout 30s fluentd -c /fluentd/etc/$FLUENTD_CONF -p /fluentd/plugins $FLUENTD_OPT
+CMD exec fluentd -c /fluentd/etc/$FLUENTD_CONF -p /fluentd/plugins $FLUENTD_OPT
