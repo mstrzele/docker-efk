@@ -7,8 +7,9 @@ services:
       - "9200:9200"
     volumes:
       - /usr/share/elasticsearch/data
-  custom-fluentd:
-    build: ./custom-fluentd
+  docker-fluentd-elasticsearch:
+    build: ./docker-fluentd-elasticsearch
+    image: mstrzele/docker-fluentd-elasticsearch
     ports:
       - "24224:24224"
     volumes:

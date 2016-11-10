@@ -1,5 +1,5 @@
 FROM fluent/fluentd:latest-onbuild
-MAINTAINER Maciej Strzelecki <maciej.strzelecki@schibsted.pl>
+MAINTAINER Maciej Strzelecki <maciej.strzelecki@gmail.com>
 WORKDIR /home/fluent
 ENV PATH /home/fluent/.gem/ruby/2.3.0/bin:$PATH
 
