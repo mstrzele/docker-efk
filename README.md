@@ -1,50 +1,87 @@
-# Docker EFK(Elasticsearch, Fluentd, Kibana)
+# Docker Machine Logs
 
-EFK setup with docker, docker-compose.
+## Elasitcsearch Virtual Memory
 
-## Requirements
+### [Docker Machine](https://docs.docker.com/machine/overview/)
 
-- docker
-- docker-compose
-
-## Usege
-
-Using docker-machine
-
-```sh
-docker-machine create -d virtualbox dev
-eval "$(docker-machine env dev)"
+```bash
+$ docker-machine ssh
+                        ##         .
+                  ## ## ##        ==
+               ## ## ## ## ##    ===
+           /"""""""""""""""""\___/ ===
+      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~~ ~ /  ===- ~~~
+           \______ o           __/
+             \    \         __/
+              \____\_______/
+ _                 _   ____     _            _
+| |__   ___   ___ | |_|___ \ __| | ___   ___| | _____ _ __
+| '_ \ / _ \ / _ \| __| __) / _` |/ _ \ / __| |/ / _ \ '__|
+| |_) | (_) | (_) | |_ / __/ (_| | (_) | (__|   <  __/ |
+|_.__/ \___/ \___/ \__|_____\__,_|\___/ \___|_|\_\___|_|
+Boot2Docker version 1.12.5, build HEAD : fc49b1e - Fri Dec 16 12:44:49 UTC 2016
+Docker version 1.12.5, build 7392c3b
+docker@default:~$ sudo sysctl -w vm.max_map_count=262144
+vm.max_map_count = 262144
+docker@default:~$ exit
 ```
 
-```sh
-docker-compose up
+### [Minikube](https://github.com/kubernetes/minikube)
+
+```bash
+$ minikube ssh
+                        ##         .
+                  ## ## ##        ==
+               ## ## ## ## ##    ===
+           /"""""""""""""""""\___/ ===
+      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~~ ~ /  ===- ~~~
+           \______ o           __/
+             \    \         __/
+              \____\_______/
+ _                 _   ____     _            _
+| |__   ___   ___ | |_|___ \ __| | ___   ___| | _____ _ __
+| '_ \ / _ \ / _ \| __| __) / _` |/ _ \ / __| |/ / _ \ '__|
+| |_) | (_) | (_) | |_ / __/ (_| | (_) | (__|   <  __/ |
+|_.__/ \___/ \___/ \__|_____\__,_|\___/ \___|_|\_\___|_|
+Boot2Docker version 1.11.1, build master : 901340f - Fri Jul  1 22:52:19 UTC 2016
+Docker version 1.11.1, build 5604cbe
+docker@minikube:~$ sudo sysctl -w vm.max_map_count=262144
+vm.max_map_count = 262144
+docker@minikube:~$ exit
 ```
 
-Use Background
+## Kibana
 
-```sh
-docker-compose up -d
+```bash
+$ docker-compose --file docker-compose.kibana.yml up
 ```
 
-```sh
-docker-compose ps
-          Name                         Command               State                Ports
------------------------------------------------------------------------------------------------------
-dockerefk_elasticsearch_1   /docker-entrypoint.sh elas ...   Up      0.0.0.0:9200->9200/tcp, 9300/tcp
-dockerefk_fluentd_1         sh -c /tmp/entrypoint.sh         Up      0.0.0.0:24224->24224/tcp
-dockerefk_kibana_1          /docker-entrypoint.sh /tmp ...   Up      0.0.0.0:5601->5601/tcp
-dockerefk_nginx_1           sh -c /tmp/entrypoint.sh         Up      443/tcp, 0.0.0.0:80->80/tcp
-dockerefk_node_app_1        sh -c /tmp/entrypoint.sh         Up      0.0.0.0:8080->8080/tcp
+### [Docker Machine](https://docs.docker.com/machine/overview/)
+
+```bash
+$ open "http://$(docker-machine ip):5601"
 ```
 
-```sh
-# open kibana
-open http://localhot:5601
+### [Minikube](https://github.com/kubernetes/minikube)
 
-# if use docker-machine
-open http://"$(docker-machine ip dev)":5601
+```bash
+$ open "http://$(minikube ip):5601"
 ```
 
-If you use docker-toolbox, localhost is docker-machine ip.
+## Graylog
 
+```bash
+$ docker-compose --file docker-compose.graylog2.yml up
+```
 
+### [Docker Machine](https://docs.docker.com/machine/overview/)
+
+```bash
+$ open "http://$(docker-machine ip):9000"
+```
+
+### [Minikube](https://github.com/kubernetes/minikube)
+
+```bash
+$ open "http://$(minikube ip):9000"
+```
