@@ -1,8 +1,29 @@
 version: '2'
 services:
+  sysctl:
+    image: busybox
+    entrypoint:
+      - sysctl
+    command:
+      - -w
+      - vm.max_map_count=262144
+    privileged: true
   elasticsearch:
-    image: elasticsearch:5.1.1
-    command: elasticsearch -E network.host=0.0.0.0
+    depends_on:
+      - sysctl
+    image: elasticsearch:5.2.2
+    environment:
+      - network.host=0.0.0.0
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    mem_limit: 1g
+    cap_add:
+      - IPC_LOCK
     ports:
       - "9200:9200"
     volumes:
@@ -17,7 +38,7 @@ services:
     links:
       - elasticsearch
   kibana:
-    image: kibana:5.1.1
+    image: kibana:5.2.2
     ports:
       - "5601:5601"
     links:
