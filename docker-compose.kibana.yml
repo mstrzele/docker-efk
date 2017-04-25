@@ -11,9 +11,11 @@ services:
   elasticsearch:
     depends_on:
       - sysctl
-    image: elasticsearch:5.2.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.3.1
     environment:
-      - network.host=0.0.0.0
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
@@ -38,8 +40,23 @@ services:
     links:
       - elasticsearch
   kibana:
-    image: kibana:5.2.2
+    image: docker.elastic.co/kibana/kibana:5.3.1
     ports:
       - "5601:5601"
     links:
       - elasticsearch
+  index-pattern:
+    links:
+      - kibana
+    image: appropriate/curl
+    command:
+      - -d
+      - '{"title" : "logstash-*",  "timeFieldName": "@timestamp"}'
+      - -H
+      - 'kbn-version: 5.3.1'
+      - -X
+      - PUT
+      - --retry
+      - "10"
+      - --retry-connrefused
+      - http://kibana:5601/es_admin/.kibana/index-pattern/logstash-*
