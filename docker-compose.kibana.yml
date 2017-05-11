@@ -30,9 +30,9 @@ services:
       - "9200:9200"
     volumes:
       - /usr/share/elasticsearch/data
-  docker-fluentd-elasticsearch:
-    build: ./docker-fluentd-elasticsearch
-    image: mstrzele/docker-fluentd-elasticsearch
+  fluentd-docker-elasticsearch:
+    build: ./fluentd-docker-elasticsearch
+    image: quay.io/mstrzele/fluentd-docker-elasticsearch
     ports:
       - "24224:24224"
     volumes:

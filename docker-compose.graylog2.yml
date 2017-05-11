@@ -28,9 +28,9 @@ services:
       - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
       - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
       - GRAYLOG_WEB_ENDPOINT_URI=http://${DOCKER_MACHINE_IP}:9000/api
-  docker-fluentd-graylog2:
-    build: ./docker-fluentd-graylog2
-    image: mstrzele/docker-fluentd-graylog2
+  fluentd-docker-graylog2:
+    build: ./fluentd-docker-graylog2
+    image: quay.io/mstrzele/fluentd-docker-graylog2
     ports:
       - "24224:24224"
     volumes:
